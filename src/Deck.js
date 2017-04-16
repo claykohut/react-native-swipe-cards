@@ -24,9 +24,9 @@ class Deck extends Component {
       },
       onPanResponderRelease: (event, gesture) => {
         if( gesture.dx > SWIPE_THRESHOLD ){
-          this.forceSwipeRight()
+          this.forceSwipe('right')
         } else if( gesture.dx < -SWIPE_THRESHOLD ){
-          this.forceSwipeLeft()
+          this.forceSwipe('left')
         } else {
           this.resetPosition()
         }
@@ -40,16 +40,10 @@ class Deck extends Component {
     }
   }
 
-  forceSwipeRight = () => {
+  forceSwipe = (direction) => {
+    const x = direction === 'right' ? SCREEN_WIDTH * 1.5 : -(SCREEN_WIDTH*1.5)
     Animated.timing(this.state.position, {
-      toValue: { x: SCREEN_WIDTH * 1.5, y: 0 },
-      duration: SWIPE_OUT_DURATION
-    }).start()
-  }
-
-  forceSwipeLeft = () => {
-    Animated.timing(this.state.position, {
-      toValue: { x: -(SCREEN_WIDTH * 1.5), y: 0 },
+      toValue: { x, y: 0 },
       duration: SWIPE_OUT_DURATION
     }).start()
   }
