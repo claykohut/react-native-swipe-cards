@@ -6,7 +6,6 @@ class Deck extends Component {
   renderCards = () => {
       const { data, renderCard } = this.props
       return data.map((item)=>{
-        console.log('mapping over item.. ', item)
         return renderCard(item)
       })
   }
