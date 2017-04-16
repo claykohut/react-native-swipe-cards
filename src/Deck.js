@@ -12,6 +12,11 @@ const SWIPE_OUT_DURATION = 400
 
 class Deck extends Component {
 
+  static defaultProps = {
+    onSwipeLeft: () => {},
+    onSwipeRight: () => {}
+  }
+
   constructor(props){
     super(props)
 
@@ -36,7 +41,8 @@ class Deck extends Component {
 
     this.state = {
       panResponder,
-      position
+      position,
+      index: 0
     }
   }
 
@@ -49,15 +55,10 @@ class Deck extends Component {
   }
 
   onSwipeComplete = (direction) => {
-    const { onSwipeLeft, onSwipeRight } = this.props
-    switch(direction){
-      case 'left':
-        onSwipeLeft && onSwipeLeft()
-        break;
-      case 'right':
-        onSwipeRight && onSwipeRight()
-        break
-    }
+    const { onSwipeLeft, onSwipeRight, data } = this.props
+    const item = data[this.state.index]
+
+    direction == 'left' ? onSwipeLeft(item) : onSwipeRight(item)
   }
 
   resetPosition = () => {
