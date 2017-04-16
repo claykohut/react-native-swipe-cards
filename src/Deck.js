@@ -7,6 +7,8 @@ import {
 } from 'react-native'
 
 const SCREEN_WIDTH = Dimensions.get('window').width
+const SWIPE_THRESHOLD = SCREEN_WIDTH * .3
+const SWIPE_OUT_DURATION = 400
 
 class Deck extends Component {
 
@@ -18,11 +20,17 @@ class Deck extends Component {
     const panResponder = PanResponder.create({
       onStartShouldSetPanResponder: () => true,
       onPanResponderMove: (event, gesture) => {
-        console.log("move! ", gesture)
         position.setValue({ x: gesture.dx , y: gesture.dy })
       },
-      onPanResponderRelease: () => {
-        this.resetPosition()
+      onPanResponderRelease: (event, gesture) => {
+        if( gesture.dx > SWIPE_THRESHOLD ){
+          this.forceSwipeRight()
+        } else if( gesture.dx < -SWIPE_THRESHOLD ){
+          this.forceSwipeLeft()
+        } else {
+          this.resetPosition()
+        }
+
       }
     })
 
@@ -30,6 +38,20 @@ class Deck extends Component {
       panResponder,
       position
     }
+  }
+
+  forceSwipeRight = () => {
+    Animated.timing(this.state.position, {
+      toValue: { x: SCREEN_WIDTH * 1.5, y: 0 },
+      duration: SWIPE_OUT_DURATION
+    }).start()
+  }
+
+  forceSwipeLeft = () => {
+    Animated.timing(this.state.position, {
+      toValue: { x: -(SCREEN_WIDTH * 1.5), y: 0 },
+      duration: SWIPE_OUT_DURATION
+    }).start()
   }
 
   resetPosition = () => {
