@@ -84,16 +84,21 @@ class Deck extends Component {
   }
 
   renderCards = () => {
-      const { data, renderCard } = this.props
+      const { data, renderCard, renderNoMoreCards } = this.props
+      const { activeIndex } = this.state
+
+      if(activeIndex >= data.length){
+        return renderNoMoreCards()
+      }
+
       return data.map((item, index)=>{
-        const { activeIndex } = this.state
         if(index < activeIndex){ return null; }
 
         if(index === activeIndex) {
           return (
             <Animated.View
-              key={0}
-              style={this.getCardStyle()}
+              key={item.id}
+              style={[this.getCardStyle(), styles.cardStyle]}
               {...this.state.panResponder.panHandlers}
             >
               {renderCard(item)}
@@ -101,8 +106,12 @@ class Deck extends Component {
           )
         }
 
-        return renderCard(item)
-      })
+        return (
+          <View key={item.id} style={styles.cardStyle}>
+            {renderCard(item)}
+          </View>
+        )
+      }).reverse()
   }
 
   render(){
@@ -111,6 +120,13 @@ class Deck extends Component {
         {this.renderCards()}
       </View>
     )
+  }
+}
+
+const styles = {
+  cardStyle: {
+    position: 'absolute',
+    width: SCREEN_WIDTH
   }
 }
 
