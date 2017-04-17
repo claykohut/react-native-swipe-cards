@@ -42,7 +42,7 @@ class Deck extends Component {
     this.state = {
       panResponder,
       position,
-      index: 0
+      activeIndex: 0
     }
   }
 
@@ -59,6 +59,9 @@ class Deck extends Component {
     const item = data[this.state.index]
 
     direction == 'left' ? onSwipeLeft(item) : onSwipeRight(item)
+
+    this.state.position.setValue({ x: 0, y: 0 })
+    this.setState({activeIndex: this.state.activeIndex + 1 });
   }
 
   resetPosition = () => {
@@ -83,7 +86,10 @@ class Deck extends Component {
   renderCards = () => {
       const { data, renderCard } = this.props
       return data.map((item, index)=>{
-        if(index === 0) {
+        const { activeIndex } = this.state
+        if(index < activeIndex){ return null; }
+
+        if(index === activeIndex) {
           return (
             <Animated.View
               key={0}
