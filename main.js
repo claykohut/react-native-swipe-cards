@@ -18,6 +18,18 @@ const DATA = [
 
 class App extends React.Component {
 
+  constructor(props){
+    super(props)
+
+    this.state = {
+      activeCards: [...DATA]
+    }
+  }
+
+  resetCards = () => {
+    this.setState({activeCards: [...DATA]})
+  }
+
   renderCard = (item) => {
     return (
       <Card
@@ -44,16 +56,19 @@ class App extends React.Component {
         <Button
           backgroundColor="#03A9F4"
           title="Get more!"
+          onPress={()=> this.resetCards()}
         />
       </Card>
     )
   }
 
   render() {
+    const { activeCards } = this.state
+
     return (
       <View style={styles.container}>
         <Deck
-          data={DATA}
+          data={activeCards}
           renderCard={this.renderCard}
           renderNoMoreCards={this.renderNoMoreCards}
         />
