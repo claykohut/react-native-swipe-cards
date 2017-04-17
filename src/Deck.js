@@ -54,9 +54,11 @@ class Deck extends Component {
     }
   }
 
-  componentWillUpdate() {
-    UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true); // for android
-    LayoutAnimation.spring();
+  componentWillUpdate(nextProps) {
+    if(nextProps.data === this.props.data){
+      UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true); // for android
+      LayoutAnimation.spring();
+    }
   }
 
   forceSwipe = (direction) => {
